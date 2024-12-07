@@ -365,27 +365,88 @@ class Datapegawai extends CI_Controller
 			$worksheet = $spreadsheet->getActiveSheet();
 
 			$row = 4;
-			$importDataPengguna = array();
+			$importDataPegawai = array();
 			while ($worksheet->getCell('B' . $row)->getValue() !== null) {
-				$namaUser = $worksheet->getCell('C' . $row)->getValue();
-				$jabatanUser = $worksheet->getCell('D' . $row)->getValue();
-				$username = $worksheet->getCell('E' . $row)->getValue();
+				$niy_pegawai = $worksheet->getCell('C' . $row)->getValue();
+				$nik_pegawai = $worksheet->getCell('D' . $row)->getValue();
+				$nama_lengkap = $worksheet->getCell('E' . $row)->getValue();
+				$tempat_lahir = $worksheet->getCell('F' . $row)->getValue();
+				$tanggal_lahir = $worksheet->getCell('G' . $row)->getValue();
+				$jenis_kelamin = $worksheet->getCell('H' . $row)->getValue();
+				$agama = $worksheet->getCell('I' . $row)->getValue();
+				$status_kawin = $worksheet->getCell('J' . $row)->getValue();
+				$no_telp_wa = $worksheet->getCell('K' . $row)->getValue();
+				$email = $worksheet->getCell('L' . $row)->getValue();
+				$tahun_masuk = $worksheet->getCell('M' . $row)->getValue();
+				$status_pegawai = $worksheet->getCell('N' . $row)->getValue();
+				$role_pegawai = $worksheet->getCell('O' . $row)->getValue();
 
-				$importDataPengguna[] = array(
-					'nama' => $namaUser,
-					'username' => $username,
-					'password' => password_hash($username, PASSWORD_DEFAULT),
-					'pass_tampil' => $username,
-					'img' => '5856.jpg',
-					'jabatan_pengguna' => $jabatanUser,
-					'peran_id' => 10
+				$importDataPegawai[] = array(
+					'niy_pegawai' => $niy_pegawai,
+					'nik_pegawai' => $nik_pegawai,
+					'nama_lengkap' => $nama_lengkap,
+					'tempat_lahir' => $tempat_lahir,
+					'tanggal_lahir' => $tanggal_lahir,
+					'jenis_kelamin' => $jenis_kelamin,
+					'agama_id' => $agama,
+					'status_perkawinan' => $status_kawin,
+					'no_wa_telp' => $no_telp_wa,
+					'email_pegawai' => $email,
+					// 'foto' => 'akun.jpg',
+					'tahun_masuk' => $tahun_masuk,
+					'status_pegawai_id' => $status_pegawai,
+					'role_pegawai' => $role_pegawai,
+					// 'aktif_pegawai' => 1,
 				);
 
 				$row++;
 			}
 
-			foreach ($importDataPengguna as $data) {
-				$this->inv->insert_data($data, 'inventory_pengguna');
+			foreach ($importDataPegawai as $data) {
+
+				$DataPegawaiUpload = [
+
+					'niy_pegawai' => $data['niy_pegawai'],
+					'nik_pegawai' => $data['nik_pegawai'],
+					'nama_lengkap' => $data['nama_lengkap'],
+					'tempat_lahir' => $data['tempat_lahir'],
+					'tanggal_lahir' => $data['tanggal_lahir'],
+					'jenis_kelamin' => $data['jenis_kelamin'],
+					'agama_id' => $data['agama_id'],
+					'status_perkawinan' => $data['status_perkawinan'],
+					'no_wa_telp' => $data['no_wa_telp'],
+					'email_pegawai' => $data['email_pegawai'],
+					'foto' => 'akun.jpg',
+					'tahun_masuk' => $data['tahun_masuk'],
+					'status_pegawai_id' => $data['status_pegawai_id'],
+					'aktif_pegawai' => 1,
+				];
+
+				$this->pm->insert_data($DataPegawaiUpload, 'pegawai_data');
+
+				$idpegawai_insert = $this->db->insert_id();
+
+				$DataAkunUser = [
+					'pegawai_id' => $idpegawai_insert,
+					'username' => $data['niy_pegawai'],
+					'password' => password_hash($data['niy_pegawai'], PASSWORD_DEFAULT),
+					'pass_tampil' => $data['niy_pegawai'],
+					'role_id' => $data['role_pegawai'],
+				];
+
+				$this->pm->insert_data($DataAkunUser, 'pegawai_user');
+
+				$dataBerkas = [
+					'berkas_pegawai_id' => $idpegawai_insert,
+					'file_lamaran_pdf' => '',
+					'file_ktp_pdf' => '',
+					'file_kk_pdf' => '',
+					'file_komitmen_pdf' => '',
+					'file_skck_pdf' => '',
+					'file_sertifikat_pdf' => ''
+				];
+
+				$this->pm->insert_data($dataBerkas, 'pegawai_data_berkas');
 			}
 
 			if (file_exists($file_path)) {
