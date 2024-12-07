@@ -166,7 +166,7 @@
 <!-- Modal Nonaktif -->
 <div class="modal fade text-left" id="unggahPegawai" tabindex="-1" role="dialog" aria-labelledby="myModalLabel9" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form action="<?= base_url(''); ?>" method="POST" enctype="multipart/form-data">
+        <form action="<?= base_url('datapegawai/upload_pegawai'); ?>" method="POST" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header bg-warning white">
                     <h4 class="modal-title white" id="myModalLabel9"><i class="fas fa-exclamation-triangle"></i> Unggah Data Pegawai</h4>
@@ -177,7 +177,7 @@
                 <div class="modal-body">
                     <div class="alert alert-success mb-2" role="alert">
                         <p>Pilih File Format Unggah Data Pegawai.</p>
-                        <span><a href="" class="badge badge-info">Download Format File Data Pegawai</a></span>
+                        <span><a href="<?= base_url('assets/file_template/format_upload_pegawai_new.xlsx'); ?>" class="badge badge-info">Download Format File Data Pegawai</a></span>
                     </div>
                     <input class="form-control" type="file" id="unggah_data_pegawai" name="unggah_data_pegawai" accept=".xlsx, .xls">
                 </div>
